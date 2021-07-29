@@ -4,7 +4,9 @@ import br.com.alura.aluraflixapi.dto.AtualizacaoVideoFormDto;
 import br.com.alura.aluraflixapi.dto.CadastroVideoFormDto;
 import br.com.alura.aluraflixapi.dto.DetalhesDoVideoDto;
 
+import br.com.alura.aluraflixapi.model.Categoria;
 import br.com.alura.aluraflixapi.model.Video;
+import br.com.alura.aluraflixapi.repository.CategoriasRepository;
 import br.com.alura.aluraflixapi.repository.VideosRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +23,20 @@ public class VideosService {
     private VideosRepository repository;
 
     @Autowired
+    private CategoriasRepository categoriasRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Transactional
     public DetalhesDoVideoDto salvar(CadastroVideoFormDto dto) {
         Video novo = modelMapper.map(dto, Video.class);
+
+        // categoria padrao = LIVRE(id = 1 no bd)
+        Long idCategoria = dto.getCategoria() == null ? 1L : dto.getCategoria();
+        Categoria categoria = categoriasRepository.getById(idCategoria);
+        novo.setCategoria(categoria);
+
         repository.save(novo);
         return modelMapper.map(novo, DetalhesDoVideoDto.class);
     }

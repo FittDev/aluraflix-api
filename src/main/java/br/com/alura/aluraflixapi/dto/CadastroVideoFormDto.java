@@ -15,5 +15,6 @@ public class CadastroVideoFormDto {
     private String descricao;
     @NotBlank
     private String url;
+    private Long categoria;
 
 }

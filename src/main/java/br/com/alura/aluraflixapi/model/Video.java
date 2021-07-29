@@ -20,6 +20,9 @@ public class Video {
     private String descricao;
     private String url;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Categoria categoria;
+
     public void atualizarInformacoes(String titulo, String descricao, String url) {
         this.titulo = titulo;
         this.descricao = descricao;
